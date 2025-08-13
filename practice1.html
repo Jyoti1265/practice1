@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Filter Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    select {
+      padding: 8px 12px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .product {
+      width: calc(33.333% - 20px);
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .product h4 {
+      margin: 10px 0 5px;
+    }
+
+    .product p {
+      font-size: 14px;
+      color: #555;
+    }
+
+    @media (max-width: 768px) {
+      .product {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .product {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Product List</h2>
+
+    <label for="category-filter">Filter by Category:</label>
+    <select id="category-filter">
+      <option value="all">All</option>
+      <option value="shoes">Shoes</option>
+      <option value="shirts">Shirts</option>
+      <option value="gadgets">Gadgets</option>
+    </select>
+
+    <div class="product-list" id="product-list">
+      <!-- Products will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { name: 'Running Shoes', category: 'shoes', description: 'Comfortable for daily runs.' },
+      { name: 'Formal Shoes', category: 'shoes', description: 'Perfect for business meetings.' },
+      { name: 'Casual Shirt', category: 'shirts', description: 'Great for everyday wear.' },
+      { name: 'Formal Shirt', category: 'shirts', description: 'Professional and sharp.' },
+      { name: 'Smartphone', category: 'gadgets', description: 'Latest technology in your hand.' },
+      { name: 'Wireless Earbuds', category: 'gadgets', description: 'High-quality audio anywhere.' }
+    ];
+
+    const validCategories = ['all', 'shoes', 'shirts', 'gadgets'];
+    const productList = document.getElementById('product-list');
+    const filterSelect = document.getElementById('category-filter');
+
+    function displayProducts(filteredProducts) {
+      productList.innerHTML = ''; // Clear current list
+
+      if (filteredProducts.length === 0) {
+        productList.innerHTML = '<p>No products found.</p>';
+        return;
+      }
+
+      filteredProducts.forEach(product => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <h4>${product.name}</h4>
+          <p>${product.description}</p>
+        `;
+        productList.appendChild(div);
+      });
+    }
+
+    // Initial display
+    displayProducts(products);
+
+    // Handle filter change
+    filterSelect.addEventListener('change', () => {
+      const selectedCategory = filterSelect.value.toLowerCase();
+
+      if (!validCategories.includes(selectedCategory)) {
+        alert("⚠️ Please select appropriate content.");
+        filterSelect.value = 'all'; // Reset to 'all'
+        displayProducts(products);
+        return;
+      }
+
+      if (selectedCategory === 'all') {
+        displayProducts(products);
+      } else {
+        const filtered = products.filter(p => p.category === selectedCategory);
+        displayProducts(filtered);
+      }
+    });
+  </script>
+
+</body>
+</html>
